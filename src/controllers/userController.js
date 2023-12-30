@@ -71,7 +71,7 @@ exports.login = async (req, res, next) => {
     }
 
     // generate token
-    const token = EncodedToken(req.body);
+    const token = EncodedToken({ user });
 
     // response
     res.status(200).json({

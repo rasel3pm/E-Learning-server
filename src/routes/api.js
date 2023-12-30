@@ -66,7 +66,7 @@ router.get("/blogs/:id", blogController.blogDetailsById);
 
 // (Private) API Endpoint:
 router.get(
-  "/enroll-course",
+  "/enroll-course/:id",
   userVerifyMiddleware,
   enrollmentController.courseEnroll
 );
