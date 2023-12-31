@@ -32,3 +32,21 @@ exports.enrollCourseInfo = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.enrolledModules = async (req, res, next) => {
+  try {
+    const enrollEmail = req.headers.email;
+    if (!enrollEmail) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Forbidden Access" });
+    }
+    const result = await enrollmentService.getSingleModule(req);
+    sendSuccessResponse(res, {
+      statusCode: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

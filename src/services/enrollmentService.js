@@ -83,3 +83,49 @@ exports.enrollCourseInfo = async (req) => {
     throw error; // Re-throw the error for further handling or logging
   }
 };
+exports.getSingleModule = async (req) => {
+  try {
+    const course_id = new ObjectId(req.params.id)
+    const user_id = new ObjectId(req.headers?._id);
+    const matchCourse ={
+      $match: {
+        $and: [
+          { courseID: course_id },
+          { userID: user_id }
+        ]
+      }
+    }
+    const courseJoin = {
+      $lookup: {from: "courses",localField: "courseID",foreignField: "_id",as: "course"}
+    };
+    const projection = {
+      $project: {
+        "course.thumbnail.publicID": 0,
+        "course.thumbnail._id": 0,
+        "course.createdAt": 0,
+        "course.updatedAt": 0,
+        "course.price": 0,
+        "course.description": 0,
+        "course.courseLevel": 0,
+        "course.courseAchievement": 0,
+        "course.courseAchievement": 0,
+        createdAt: 0,
+        updatedAt: 0,
+        description: 0,
+        userID: 0,
+        courseID: 0,
+      },
+    };
+    const result = await EnrollmentModel.aggregate([
+      matchCourse,courseJoin,projection
+    ]);
+
+    if (!result || result.length === 0) {
+      throw new Error("No matching enrollment found for the given userID.");
+    }
+    return result;
+  } catch (error) {
+    console.error("Error in enrollCourseInfo:", error);
+    throw error; // Re-throw the error for further handling or logging
+  }
+};
