@@ -12,8 +12,6 @@
       "dest": "/"
     }
   ]
-}
-{
   "functions": {
     "api/index.js": {
       "maxDuration": 30 // This function can run for a maximum of 30 seconds
